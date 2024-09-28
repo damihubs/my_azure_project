@@ -1,5 +1,13 @@
 name: Deploy to Azure
-on: push
+
+on:
+  push:                           # Trigger the deployment workflow on push to the 'main' branch
+    branches:
+      - main
+  pull_request:                   # Trigger the deployment workflow on pull requests targeting the 'main' branch
+    branches:
+      - main
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
