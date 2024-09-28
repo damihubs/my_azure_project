@@ -17,3 +17,11 @@ jobs:
         run: |                     
           echo "Deleting log files older than 7 days..."  # Print message to log
           find logs/ -type f -mtime +7 -delete            # Finds and deletes files older than 7 days in the 'logs' directory
+
+      - name: Delete Temporary Files          # New cleanup task for temp files
+        run: |
+          find temp/ -type f -mtime +7 -delete   # Find and delete temp files older than 7 days
+
+      - name: Delete Cache Files              # New cleanup task for cache files
+        run: |
+          find cache/ -type f -mtime +7 -delete  # Find and delete cache files older than 7 days
