@@ -1,0 +1,19 @@
+name: Deploy to Azure
+on: push
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Tests                      # Add a step to run tests before deployment
+        run: npm test                        # Command to run your tests (adjust this for your language)
+
+      - name: Deploy to Azure App Service     # Deploy only if tests pass
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "my-web-app"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .
