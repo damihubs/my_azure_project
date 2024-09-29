@@ -24,6 +24,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Run Tests
+        run: npm test  # Adjust based on your testing framework
+
+      - name: Deploy if tests pass
+        if: success()  # Only deploy if tests pass
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "my-web-app"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .
+
       - name: Set up environment variables
         run: echo "Deploying to ${{ matrix.environment }} environment"
 
@@ -56,5 +67,3 @@ jobs:
          webhook-url: ${{ secrets.TEAMS_WEBHOOK_URL }}
          title: "Deployment Failed"
          text: "The deployment to Azure App Service failed."
-
-
