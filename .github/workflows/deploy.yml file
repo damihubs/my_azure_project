@@ -11,6 +11,9 @@ on:
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [staging, production]  # Define multiple environments
 
     steps:
       - name: Check out repository
@@ -21,14 +24,15 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Set up environment variables
+        run: echo "Deploying to ${{ matrix.environment }} environment"
+
       - name: Display Deployment Start
-        run: echo "Starting deployment to Azure..."  # Output message to indicate the start of the deployment
+        run: echo "Starting deployment to Azure ${{ matrix.environment }}..."  # Indicate the start of deployment
 
       - name: Deploy to Azure App Service
-        run: echo "Deploying code to Azure App Service..."  # Output message for progress tracking
-      - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
         with:
-          app-name: "my-web-app"
+          app-name: "my-web-app-${{ matrix.environment }}"  # Deploy to staging or production based on environment
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
